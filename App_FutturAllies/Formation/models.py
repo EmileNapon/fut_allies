@@ -34,7 +34,7 @@ class Chapitre(models.Model):
 
 class Section(models.Model):
     chapitre = models.ForeignKey(Chapitre, on_delete=models.CASCADE, default=1)  # Relation vers Chapitre
-    nom_section=models.CharField(max_length=800, default='')
+    nom_section=models.TextField(max_length=800, default='')
     def __str__(self):
         return self.nom_section  # Retourne les premiers 50 caractères
 
