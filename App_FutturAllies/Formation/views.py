@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from Formation.models import Domaine, Module, Cours, Chapitre,Contenu, WebinarEnrollment
-from .serializers import ChapitreSerializer, ContenuSerializer, CoursSerializer, DomaineSerializer, ModuleSerializer, WebinarEnrollmentSerializer
+from Formation.models import Domaine, Module, Cours, Chapitre,Contenu, WebinarEnrollment, Section
+from .serializers import ChapitreSerializer, ContenuSerializer, CoursSerializer, DomaineSerializer, ModuleSerializer, WebinarEnrollmentSerializer, SectionSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -85,6 +85,24 @@ def list_chapitres(request):
     
 ###################################################################################################
 
+@api_view(['POST'])
+def create_section(request):
+    if request.method == 'POST':
+        serializer = SectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])  # Permet seulement aux utilisateurs authentifiés de lister les offres
+def list_section(request):
+    section= Section.objects.all()  # Récupérer toutes les offres
+    serializer = SectionSerializer(section, many=True)  # Sérialiser les données
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+###################################################################################################
 
 @api_view(['POST'])
 def create_contenu(request):
@@ -98,7 +116,7 @@ def create_contenu(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])  # Permet seulement aux utilisateurs authentifiés de lister les offres
+# @permission_classes([IsAuthenticated])  # Permet seulement aux utilisateurs authentifiés de lister les offres
 def list_contenus(request):
     contenu= Contenu.objects.all()  # Récupérer toutes les offres
     serializer = ContenuSerializer(contenu, many=True)  # Sérialiser les données

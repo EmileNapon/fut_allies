@@ -2,7 +2,7 @@ from email.headerregistry import Group
 from rest_framework import serializers
 
 import Formation
-from .models import Domaine,  Module, Cours, Chapitre, Contenu, Video
+from .models import Domaine,  Module, Cours, Chapitre, Contenu, Video, Section
 
 class DomaineSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,6 +23,13 @@ class ChapitreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chapitre
         fields =  '__all__'  # Including all necessary fields
+
+
+class SectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
+        fields =  '__all__'   # Including all necessary fields
+
 
 class ContenuSerializer(serializers.ModelSerializer):
     class Meta:
