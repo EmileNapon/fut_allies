@@ -6,16 +6,15 @@ class Institution(models.Model):
     name =models.CharField(max_length=100)
     localisation=models.CharField(max_length=30)
 
-
 class Certification(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,)
-    institution=models.ForeignKey(Institution, on_delete=models.CASCADE)
+    # institution=models.ForeignKey(Institution, on_delete=models.CASCADE)
     # Titre de la certification, maximum 200 caractères
     title = models.CharField(max_length=200)
     # Description détaillée de la certification
     description = models.TextField() 
-    objectif=models.TextField( default='') 
-    prerequisites = models.TextField()
+    criteres=models.TextField( default='') 
+    # prerequisites = models.TextField()
 
     # Niveau de la certification, utilisant des choix prédéfinis
     # Utilisation de TextChoices pour définir des niveaux (ex: Débutant, Intermédiaire, Avancé)
@@ -34,14 +33,15 @@ class Certification(models.Model):
     # Utilisation d'un IntegerField ou d'un autre type de champ en fonction de la logique
     validityPeriod = models.IntegerField()  # Si c'est une période en années, par exemple
     # Prérequis nécessaires avant de passer la certification (ex: certifications antérieures)
-    
     # Format de l'examen, utilisant des choix prédéfinis (ex: en ligne, en présentiel)
     examFormat = models.CharField(max_length=100, choices=[('Online', 'En ligne'),('In-person', 'En présentiel')],default='En ligne')
     # Nombre de questions dans l'examen
-    numberOfQuestions = models.IntegerField()  # Corrected to IntegerField
     # Score nécessaire pour réussir l'examen, en pourcentage (float)
-    passingScore = models.FloatField()  # Corrected to FloatField
+    # passingScore = models.FloatField()  # Corrected to FloatField
 
+class prerequisites(models.Model):
+    certification=models.ForeignKey(Certification, on_delete=models.CASCADE)
+    chapitre=models.ForeignKey(Chapitre, on_delete=models.CASCADE)
 
 class Question(models.Model):
     texte = models.TextField()
@@ -60,11 +60,11 @@ class Option(models.Model):
         return self.texte
 
 class Exam(models.Model):
-    certification = models.ForeignKey(Certification, on_delete=models.CASCADE, related_name='candidates')
+    # certification = models.ForeignKey(Certification, on_delete=models.CASCADE, related_name='candidates')
     date =models.DateField()
     score =models.FloatField()
     status= models.CharField(max_length=20,choices=[('passed', 'Passed'),('failed', 'Failed')],default='Passed') 
-
+    numberOfQuestions = models.IntegerField(default=30)  # Corrected to IntegerField
 
 
 

@@ -48,10 +48,10 @@ INSTALLED_APPS = [
     'Formation',
     'programmeTalent',
     'Offres',
-    "certification",
+    "certificats",
     'corsheaders',
     'rest_framework.authtoken',     ##
-   "imputation"  
+   "imputation" 
 ]
 
 

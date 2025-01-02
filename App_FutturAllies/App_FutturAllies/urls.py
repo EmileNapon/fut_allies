@@ -23,6 +23,6 @@ urlpatterns = [
     path('fidalli/',include('Formation.url')),
     path('fidalli/',include('Offres.url')),
     path('fidalli/',include('programmeTalent.url')),
-    path('fidalli/',include('certification.url')),
+    path('fidalli/',include('certificats.url')),
     path('meteo/',include('imputation.url')),
 ]
