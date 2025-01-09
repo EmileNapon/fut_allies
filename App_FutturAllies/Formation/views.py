@@ -127,25 +127,44 @@ def list_contenus(request):
 #####################################################################  modification     
 
 class ContentView(APIView):
-    def get(self, request, contenu_id):
+    def get(self, request, contenu_id=None):
         contenu = get_object_or_404(Contenu, id=contenu_id)
         serializer = ContenuSerializer(contenu)
         return Response(serializer.data)
 
-    def put(self, request):
-        updated_data = []
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Contenu, Section
+from .serializers import ContenuSerializer
+
+@api_view(['PUT'])
+def update_contenu(request):
+    try:
+        updated_contens = []
         for contenu_data in request.data:
-            contenu_id = contenu_data.get('id')
-            if contenu_id is None:
-                return Response({"error": "Chaque contenu doit avoir un champ ID."}, status=status.HTTP_400_BAD_REQUEST)
-            contenu = get_object_or_404(Contenu, id=contenu_id)
-            serializer = ContenuSerializer(contenu, data=contenu_data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                updated_data.append(serializer.data)  
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(updated_data, status=status.HTTP_200_OK)
+            # Récupérer l'instance du Contenu
+            contenu = Contenu.objects.get(id=contenu_data['id'])
+            
+            # Mettre à jour les champs
+            contenu.description = contenu_data['description']
+            
+            # Récupérer l'instance de la Section correspondante à l'ID
+            
+            contenu.save()  # Sauvegarde dans la base de données
+            updated_contens.append(contenu)
+
+        # Sérialisation des objets mis à jour
+        serializer = ContenuSerializer(updated_contens, many=True)
+        return Response({
+            'updated': serializer.data,
+            'errors': []
+        })
+    except Exception as e:
+        return Response({
+            'updated': [],
+            'errors': str(e)
+        }, status=400)
 
 #####################################################################  modification     
 

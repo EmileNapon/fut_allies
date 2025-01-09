@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from .views import ContentView, ChapitreView
 
 urlpatterns = [
     path('modules/create/', views.create_module, name='create_module'),
@@ -21,11 +21,11 @@ urlpatterns = [
 ##########################################################################################
     path('contenu/create/', views.create_contenu, name='create_contenu'),
     path('contenus/list_contenus', views.list_contenus, name='list_contenus'),
-    path('contenu/update-contenu/', views.ContentView.as_view(), name='create_contenu'),
+    path('contenu/update-contenu/', views.update_contenu, name='create_contenu'),
     #########################################################################################
-    path('contenu/<int:contenu_id>/', views.ContentView.as_view(), name='detail_contenu'), 
+    path('contenu/<int:contenu_id>/', ContentView.as_view(), name='detail_contenu'), 
     #########################################################################################
-    path('chapitre/<int:chapitre_id>/', views.ChapitreView.as_view(), name='detail_chapitre'), 
+    path('chapitre/<int:chapitre_id>/', ChapitreView.as_view(), name='detail_chapitre'), 
 
 #########################################################################################
 
